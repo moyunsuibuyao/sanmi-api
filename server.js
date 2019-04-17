@@ -6,6 +6,7 @@ const app = express();
 
 const users = require('./routes/api/users');
 const profiles = require('./routes/api/profiles');
+const menus = require('./routes/api/menus');
 
 const port = process.env.PORT || 5000;
 
@@ -25,9 +26,10 @@ mongoose.connect(db).then(() => {
 app.use(passport.initialize());
 require('./config/passport')(passport);
 
-// user router
+// use router
 app.use('/api/users', users);
 app.use('/api/profiles', profiles);
+app.use('/api/menus', menus);
 
 app.listen(port, () => {
   console.log(`server is running on port ${port}`)

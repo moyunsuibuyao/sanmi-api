@@ -2,29 +2,28 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 //Create Schema
-const ProfileSchema = new Schema({
-  type: {
-    type: String
+const MenuSchema = new Schema({
+  isAdmin: {
+    type: String,
+    default: 0
   },
-  describe: {
-    type: String
-  },
-  income: {
+  name: {
     type: String,
     required: true
   },
-  expend: {
-    type: String,
-    required: true
-  },
-  crash: {
+  icon: {
     type: String,
   },
-  remark: {
+  level: {
+    type: Number,
+    default: 1
+  },
+  path: {
     type: String,
   },
   parentId: {
     type: String,
+    default: 0,
   },
   date: {
     type: Date,
@@ -32,4 +31,4 @@ const ProfileSchema = new Schema({
   }
 });
 
-module.exports = Profile = mongoose.model('profiles', ProfileSchema);
+module.exports = Menu = mongoose.model('menus', MenuSchema);

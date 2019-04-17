@@ -4,6 +4,7 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const gravatar = require('gravatar');
 const jwt = require('jsonwebtoken');
+const Base64 = require('js-base64').Base64;
 const passport = require('passport');
 const keys = require('../../config/keys');
 const User = require('../../models/User');
@@ -25,7 +26,7 @@ router.post('/register', (req, res) => {
         name: req.body.name,
         email: req.body.email,
         avatar,
-        password: req.body.password,
+        password: Base64.decode(req.body.password),
         identity: req.body.identity
       });
       bcrypt.genSalt(10, function (err, salt) {
@@ -50,7 +51,7 @@ router.post('/register', (req, res) => {
  */
 router.post('/login', (req, res) => {
   const email = req.body.email;
-  const password = req.body.password;
+  const password = Base64.decode(req.body.password);
   User.findOne({ email }).then((user) => {
     if (!user) {
       return res.status(404).json('用户不存在');

@@ -7,6 +7,7 @@ const app = express();
 const users = require('./routes/api/users');
 const profiles = require('./routes/api/profiles');
 const menus = require('./routes/api/menus');
+const personal = require('./routes/api/personal');
 
 const port = process.env.PORT || 5000;
 
@@ -30,6 +31,7 @@ require('./config/passport')(passport);
 app.use('/api/users', users);
 app.use('/api/profiles', profiles);
 app.use('/api/menus', menus);
+app.use('/api/personal', personal);
 
 app.listen(port, () => {
   console.log(`server is running on port ${port}`)

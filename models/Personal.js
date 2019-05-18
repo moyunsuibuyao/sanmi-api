@@ -5,6 +5,10 @@ const PersonalSchema = new Schema({
   name: {
     type: String
   },
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  },
   school: {
     type: String
   },

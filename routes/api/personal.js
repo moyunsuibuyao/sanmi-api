@@ -36,7 +36,8 @@ router.post('/add', passport.authenticate('jwt', { session: false }), (req, res)
     major: '',
     faculty: '',
     remark: '',
-    userId: ''
+    userId: '',
+    skill: []
   };
   Object.assign(baseInfo, req.body)
 
@@ -61,8 +62,8 @@ router.post('/edit', passport.authenticate('jwt', { session: false }), (req, res
   if (req.body.startSchoolDate) updatePersonal.startSchoolDate = req.body.startSchoolDate;
   if (req.body.graduateDate) updatePersonal.graduateDate = req.body.graduateDate;
   if (req.body.faculty) updatePersonal.faculty = req.body.faculty;
+  if (req.body.skill && req.body.skill.length) updatePersonal.skill = req.body.skill;
 
-  console.log(req.body)
   Personal.findOneAndUpdate(
     {_id: req.body._id},
     {$set: updatePersonal},

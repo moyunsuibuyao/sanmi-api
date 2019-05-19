@@ -36,6 +36,10 @@ const PersonalSchema = new Schema({
   remark: {
     type: String
   },
+  skill: [{
+    label: String,
+    value: Number
+  }],
   date: {
     type: Date,
     default: Date.now()

@@ -9,6 +9,7 @@ const profiles = require('./routes/api/profiles');
 const menus = require('./routes/api/menus');
 const personal = require('./routes/api/personal');
 const works = require('./routes/api/works');
+const projects = require('./routes/api/projects');
 
 const port = process.env.PORT || 5000;
 
@@ -34,6 +35,7 @@ app.use('/api/profiles', profiles);
 app.use('/api/menus', menus);
 app.use('/api/personal', personal);
 app.use('/api/works', works);
+app.use('/api/projects', projects);
 
 app.listen(port, () => {
   console.log(`server is running on port ${port}`)

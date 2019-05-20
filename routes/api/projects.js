@@ -2,15 +2,15 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 
-const Work = require('../../models/Work');
+const Project = require('../../models/Project');
 
 /*
-* @router POST api/works/add
-* @desc 新增工作经历
+* @router POST api/projects/add
+* @desc 新增项目经历
 * @access Private
  */
 router.post('/add', passport.authenticate('jwt', { session: false }), (req, res) => {
-  let workItem = {
+  let projectItem = {
     startTime: '',
     endTime: '',
     remark: '',
@@ -18,42 +18,42 @@ router.post('/add', passport.authenticate('jwt', { session: false }), (req, res)
     userId: '',
     experienceType: ''
   };
-  Object.assign(workItem, req.body)
+  Object.assign(projectItem, req.body)
 
-  new Work(workItem).save().then(work => {
+  new Project(projectItem).save().then(work => {
     res.json(work);
   });
 });
 
 /*
-* @router GET api/works/edit
+* @router GET api/projects/edit
 * @desc 编辑工作经历
 * @access Private
  */
 router.post('/edit', passport.authenticate('jwt', { session: false }), (req, res) => {
-  let workItem = {};
-  if (req.body.startTime) workItem.startTime = req.body.startTime;
-  if (req.body.endTime) workItem.endTime = req.body.endTime;
-  if (req.body.remark) workItem.remark = req.body.remark;
-  if (req.body.company) workItem.company = req.body.company;
-  if (req.body.experienceType) workItem.experienceType = req.body.experienceType;
+  let projectItem = {};
+  if (req.body.startTime) projectItem.startTime = req.body.startTime;
+  if (req.body.endTime) projectItem.endTime = req.body.endTime;
+  if (req.body.remark) projectItem.remark = req.body.remark;
+  if (req.body.company) projectItem.company = req.body.company;
+  if (req.body.experienceType) projectItem.experienceType = req.body.experienceType;
 
-  Work.findOneAndUpdate(
+  Project.findOneAndUpdate(
     {_id: req.body._id},
-    {$set: workItem},
+    {$set: projectItem},
     {new: true},
-  ).then((work) => {
-    res.json(work);
+  ).then((project) => {
+    res.json(project);
   }).catch(err => res.status(500).json(err))
 });
 
 /*
-* @router GET api/works/list
-* @desc 获取工作经历
+* @router GET api/projects/list
+* @desc 获取项目经历
 * @access Private
  */
 router.get('/list', passport.authenticate('jwt', { session: false }), (req, res) => {
-  Work.find(req.query).then((works) => {
+  Project.find(req.query).then((works) => {
     if (!works) {
       return res.status(404).json('没有数据');
     }
@@ -62,30 +62,30 @@ router.get('/list', passport.authenticate('jwt', { session: false }), (req, res)
 });
 
 /*
-* @router GET api/works/item
-* @desc 获取单个工作经历
+* @router GET api/projects/item
+* @desc 获取单个项目经历
 * @access Private
  */
 router.get('/item', passport.authenticate('jwt', { session: false }), (req, res) => {
-  Work.findOne(req.query).then((work) => {
-    if (!work) {
+  Project.findOne(req.query).then((project) => {
+    if (!project) {
       return res.status(404).json('没有数据');
     }
-    res.json(work);
+    res.json(project);
   }).catch(err => res.status(404).json(err));
 });
 
 /*
-* @router DELETE api/works/delete
-* @desc 删除单个工作经历
+* @router DELETE api/projects/delete
+* @desc 删除单个项目经历
 * @access Private
  */
 router.get('/delete', passport.authenticate('jwt', { session: false }), (req, res) => {
-  Work.findOneAndRemove(req.query).then((work) => {
-    if (!work) {
+  Project.findOneAndRemove(req.query).then((project) => {
+    if (!project) {
       return res.status(404).json('没有数据');
     }
-    res.json(work);
+    res.json(project);
   }).catch(err => res.status(404).json(err));
 });
 

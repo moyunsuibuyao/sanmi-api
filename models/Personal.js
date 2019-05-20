@@ -40,6 +40,18 @@ const PersonalSchema = new Schema({
     label: String,
     value: Number
   }],
+  education: {
+    type: String
+  },
+  city: {
+    type: String
+  },
+  sex: {
+    type: Number
+  },
+  job: {
+    type: String
+  },
   date: {
     type: Date,
     default: Date.now()

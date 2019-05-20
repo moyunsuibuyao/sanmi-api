@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const WorkSchema = new Schema({
+const PeojectSchema = new Schema({
   startTime: {
     type: Date,
     required: true
@@ -31,4 +31,4 @@ const WorkSchema = new Schema({
   }
 })
 
-module.exports = Work = mongoose.model('works', WorkSchema);
+module.exports = Project = mongoose.model('projects', PeojectSchema);

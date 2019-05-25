@@ -2,12 +2,6 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const ArticleSchema = new Schema({
-  writeType: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'WriteType'
-    }
-  ],
   title: {
     type: String,
     required: true
@@ -24,10 +18,10 @@ const ArticleSchema = new Schema({
     type: String,
     required: true
   },
-  writeType: {
-    type: Array,
-    required: true
-  },
+  writeType: [{
+    type: Schema.Types.ObjectId,
+    ref: 'writeType'
+  }],
   creatorId: {
     type: String,
     required: true

@@ -3,7 +3,6 @@ const router = express.Router();
 const passport = require('passport');
 
 const Article = require('../../models/Article');
-const WriteType = require('../../models/WriteType')
 
 /*
 * @router POST api/writeTypes/add
@@ -11,22 +10,20 @@ const WriteType = require('../../models/WriteType')
 * @access Private
  */
 router.post('/add', passport.authenticate('jwt', { session: false }), (req, res) => {
-  WriteType.where('_id').in(req.body.writeType).exec((err, types) => {
-    let ArticleItem = {
-      content: '',
-      creatorId: '',
-      markdownContent: '',
-      creator: '',
-      title: '',
-      description: ''
-    };
-    Object.assign(ArticleItem, req.body)
-    ArticleItem.writeType = types,
+  let ArticleItem = {
+    content: '',
+    creatorId: '',
+    markdownContent: '',
+    creator: '',
+    title: '',
+    description: '',
+    writeType: []
+  };
+  Object.assign(ArticleItem, req.body)
 
-    new Article(ArticleItem).save().then(article => {
-      res.json(article);
-    });
-  })
+  new Article(ArticleItem).save().then(article => {
+    res.json(article);
+  });
 });
 
 /*
@@ -35,7 +32,11 @@ router.post('/add', passport.authenticate('jwt', { session: false }), (req, res)
 * @access Private
  */
 router.get('/list', passport.authenticate('jwt', { session: false }), (req, res) => {
-  Article.find(req.query).sort({'_id': -1}).then((article) => {
+  let obj = {}
+  if (req.query.type && req.query.type.length) {
+    obj = { writeType: { $in: req.query.type } }
+  }
+  Article.find(obj).populate('writeType').sort({'_id': -1}).exec().then((article) => {
     if (!article) {
       return res.status(404).json('没有数据');
     }
@@ -49,7 +50,7 @@ router.get('/list', passport.authenticate('jwt', { session: false }), (req, res)
 * @access Private
  */
 router.get('/item', passport.authenticate('jwt', { session: false }), (req, res) => {
-  Article.findOne({ _id: req.query.id }).then((article) => {
+  Article.findOne({ _id: req.query.id }).populate('writeType').then((article) => {
     if (!article) {
       return res.status(404).json('没有数据');
     }
@@ -63,18 +64,15 @@ router.get('/item', passport.authenticate('jwt', { session: false }), (req, res)
 * @access Private
  */
 router.post('/edit', passport.authenticate('jwt', { session: false }), (req, res) => {
-  WriteType.where('_id').in(req.body.writeType).exec((err, types) => {
-    let articleItem = {};
-    Object.assign(articleItem, req.body)
-    articleItem.writeType = types
-    Article.findOneAndUpdate(
-      {_id: req.body._id},
-      {$set: articleItem},
-      {new: true},
-    ).then((article) => {
-      res.json(article);
-    }).catch(err => res.status(500).json(err))
-  })
+  let articleItem = {};
+  Object.assign(articleItem, req.body)
+  Article.findOneAndUpdate(
+    {_id: req.body._id},
+    {$set: articleItem},
+    {new: true},
+  ).then((article) => {
+    res.json(article);
+  }).catch(err => res.status(500).json(err))
 });
 
 /*

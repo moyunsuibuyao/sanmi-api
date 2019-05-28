@@ -36,11 +36,22 @@ router.get('/list', passport.authenticate('jwt', { session: false }), (req, res)
   if (req.query.type && req.query.type.length) {
     obj = { writeType: { $in: req.query.type } }
   }
-  Article.find(obj).populate('writeType').sort({'_id': -1}).exec().then((article) => {
-    if (!article) {
-      return res.status(404).json('没有数据');
-    }
-    res.json(article);
+  const page = req.query.pageSize ? req.query.pageSize : 10
+  const count = (req.query.pageNo - 1) * page
+  Article.find(obj).populate('writeType').limit(page).skip(count).sort({'date': -1}).exec().then((article) => {
+    Article.count({}, (error, total) => {
+      if (!article) {
+        return res.status(404).json('没有数据');
+      }
+      const obj = {}
+      obj.dataList = article
+      obj.page = {
+        pageSize: parseInt(req.query.pageSize),
+        pageNo: parseInt(req.query.pageNo),
+        pageTotal: total
+      }
+      res.json(obj);
+    })
   }).catch(err => res.status(404).json(err));
 });
 
